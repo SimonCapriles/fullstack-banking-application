@@ -1,70 +1,52 @@
-# Getting Started with Create React App
+# Banking Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+> Version 1.0.0.1
 
-## Available Scripts
+A project to create a bank account and do banking transactions.
 
-In the project directory, you can run:
+![Banking Application](./public/banking-application.gif)
 
-### `npm start`
+## How to use
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+1. **Download** the project by using git commands.
+2. **Install javascript dependencies** by running "npm install".
+3. **Install Docker** in your computer from the [Docker](https://www.docker.com/products/docker-desktop) page.
+4. **Install Mongo DB** by running in the command line the following commands:
+    1. docker pull mongo
+    2. docker run -p 27017:27017 --name bank -d mongo
+5. **Start Frontend** by running "npm start" in the command line.
+6. **Start Backend** by running "node index.js" in another command line.
+7. **Enjoy** by interacting with the app from the port 3000 in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## What we used for the project
 
-### `npm test`
+In this project we are using:
+- **React** as the framework for the front end
+- **Bootstrap** to improve the front end appearance
+- **Formik** for the form values validation and interaction
+- **Node JS** as the backend server to interact with the project's database
+- **Mongo DB** to store the application's data
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Features
 
-### `npm run build`
+- **Create account** to add more fun
+- **Secure authentication** to add more fun
+- **Secure banking transactions** to add more fun
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## LICENSE
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+This project is under the MIT license
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Maintainers
+Who worked on this:
+- [Simon Capriles](https://simoncapriles.github.io/)
 
-### `npm run eject`
+## Support
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Found some issues?  
+Write to this email: <a href="mailto:info@kyohei.com.bo"><i class="font-icon icon-envelope"></i>info@kyohei.com.bo</a>
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Github
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Want to download or fork the project?  
+Find it on Github: [PacMen-Exercise](https://github.com/SimonCapriles/PacMen-Exercise)
