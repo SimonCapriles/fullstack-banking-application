@@ -1,8 +1,9 @@
 import React from 'react';
 import {useFormik} from "formik";
 import Card from './context';
-import {ThemeContext} from "./context";
+import {ThemeContext, serverUrl} from "./context";
 import {UserContext} from "./App";
+import {updateBalance} from "./context";
 
 function Deposit() {
     const {user, setUser} = React.useContext(UserContext);
@@ -17,10 +18,26 @@ function Deposit() {
         // On Submit actions
         onSubmit: () => {
             if (Object.keys(Formik.errors).length === 0) {
-                alert('Sucess')
-                let temp = {...user}
-                temp.balance = user.balance + Formik.values.depositAmount
-                setUser(temp)
+                let uid = user.uid;
+                let balance = Formik.values.depositAmount;
+                // Make deposit on db
+                const url = `${serverUrl}/account/deposit/${uid}/${balance}`;
+                (async () => {
+                    var res = await fetch(url);
+                    var data = await res.json();
+                    if (data) {
+                        updateBalance(uid).then((result)=>{
+                            if (result) {
+                                let temp = {...user};
+                                temp.balance = result;
+                                setUser(temp);
+                                setStatus(true);
+                            }
+                        })
+                    } else {
+                        alert('No data found')
+                    }
+                })();
                 setStatus(true);
                 Formik.resetForm();
             }

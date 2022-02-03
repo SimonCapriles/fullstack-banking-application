@@ -1,7 +1,7 @@
 import React from 'react';
 import {useFormik} from "formik";
-import Card from "./context";
-import {ThemeContext} from "./context";
+import Card, {updateBalance} from "./context";
+import {ThemeContext, serverUrl} from "./context";
 import {UserContext} from "./App";
 
 function Withdraw(){
@@ -22,10 +22,26 @@ function Withdraw(){
                     setInvalid(true)
                     alert('Transaction Failed')
                 } else{
-                    alert('Success')
-                    let temp = {...user}
-                    temp.balance = user.balance - Formik.values.withdrawAmount
-                    setUser(temp)
+                    let uid = user.uid;
+                    let balance = Formik.values.withdrawAmount;
+                    // Make withdraw on db
+                    const url = `${serverUrl}/account/withdraw/${uid}/${balance}`;
+                    (async () => {
+                        var res = await fetch(url);
+                        var data = await res.json();
+                        if (data) {
+                            updateBalance(uid).then((result)=>{
+                                if (result) {
+                                    let temp = {...user};
+                                    temp.balance = result;
+                                    setUser(temp);
+                                    setStatus(true);
+                                }
+                            })
+                        } else {
+                            alert('No data found')
+                        }
+                    })();
                 }
                 setStatus(true);
                 Formik.resetForm();

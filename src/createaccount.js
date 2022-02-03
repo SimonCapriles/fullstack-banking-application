@@ -1,10 +1,9 @@
 import React from 'react';
-import {ThemeContext} from "./context";
+import {ThemeContext, serverUrl} from "./context";
 import {useFormik} from "formik";
 import Card from './context';
 import {validateEmail} from "./context";
 
-import {app} from './firebaseConfig'
 import {signInWithRedirect, getRedirectResult, signInWithPopup, GoogleAuthProvider, getAuth} from "firebase/auth";
 
 import {createUserWithEmailAndPassword} from "firebase/auth";
@@ -45,24 +44,23 @@ function CreateAccount() {
                         .then((userCredential) => {
                             // Signed in
                             const user = userCredential.user;
+                            let uid = user.uid
                             // Message if user created
                             alert('Firebase Account created');
-                            // Create records in database
-                            const url = `/account/create/${name}/${email}/${password}`;
+                            // Create records in Mongodb
+                            const url = `${serverUrl}/account/create/${name}/${email}/${password}/${uid}`;
                             (async () => {
                                 var res = await fetch(url);
                                 var data = await res.json();
                                 if (data) {
-                                    alert('Account created in database');
+                                    console.log('Account created in database');
                                 }
                             })();
                             setStatus(true);
                             Formik.resetForm();
                         })
                         .catch((error) => {
-                            const errorCode = error.code;
-                            const errorMessage = error.message;
-                            console.log(`Error: ${errorCode} ${errorMessage}`);
+                            console.log(`Error: ${error.code} ${error.message}`);
                         });
                 } else {
                     signInWithPopup(auth, provider)
@@ -86,13 +84,11 @@ function CreateAccount() {
                                 const user = result.user;
                             }).catch((error) => {
                             // Handle Errors here.
-                            const errorCode = error.code;
-                            const errorMessage = error.message;
+                            console.log(error.message);
                             // The email of the user's account used.
                             const email = error.email;
                             // The AuthCredential type that was used.
                             const credential = GoogleAuthProvider.credentialFromError(error);
-                            // ...
                         });
                         signInWithRedirect(auth, provider);
                     });

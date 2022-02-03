@@ -1,9 +1,10 @@
 import React from 'react';
-import {ThemeContext} from './context'
+import {ThemeContext, serverUrl} from './context'
 import {UserContext} from "./App";
 import {useFormik} from "formik";
 import Card from './context';
 import {validateEmail} from "./context";
+import {Link} from "react-router-dom";
 
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
@@ -27,8 +28,27 @@ function Login(){
                     .then((userCredential) => {
                         // Signed in
                         const user = userCredential.user;
+                        let uid = user.uid
                         console.log(user.email)
-                        alert(`Welcome ${user}`);
+                        // Search for record
+                        const url = `${serverUrl}/account/login/${uid}`;
+                        (async () => {
+                            var res = await fetch(url);
+                            var data = await res.json();
+                            let user_data = data[0]
+                            if (data) {
+                                alert(`Welcome ${data[0].name}`);
+                                console.log(data)
+                                setStatus(true);
+                                setUser({
+                                    uid: user_data.uid,
+                                    name: user_data.name,
+                                    balance: parseFloat(user_data.balance)
+                                })
+                            } else {
+                                alert('No data found')
+                            }
+                        })();
                     })
                     .catch((error) => {
                         console.log(error.message);
@@ -53,20 +73,31 @@ function Login(){
         <Card
             txtcolor={theme.txtcolor}
             bgcolor={theme.bgcolor}
-            header="LOGIN"
+            header={!status && "LOGIN"}
             status={status}
             body={(
-                <form onSubmit={Formik.handleSubmit}>
-                    <div>EMAIL</div>
-                    <input name="email" type="text" onChange={Formik.handleChange} value={Formik.values.email}/>
-                    <div style={{color: 'red'}}>{Formik.errors.email}</div>
-                    <div>PASSWORD</div>
-                    <input name="password" type={Formik.values.showPassword ? 'text' : 'password'}
-                           onChange={Formik.handleChange} value={Formik.values.password}/>
-                    <input name="showPassword" type="checkbox" onChange={Formik.handleChange}/>
-                    <div style={{color: 'red'}}>{Formik.errors.password}</div>
-                    <button type="submit">LOGIN</button>
-                </form>)}
+                <div>
+                { !status &&
+                    <form onSubmit={Formik.handleSubmit}>
+                        <div>EMAIL</div>
+                        <input name="email" type="text" onChange={Formik.handleChange} value={Formik.values.email}/>
+                        <div style={{color: 'red'}}>{Formik.errors.email}</div>
+                        <div>PASSWORD</div>
+                        <input name="password" type={Formik.values.showPassword ? 'text' : 'password'}
+                               onChange={Formik.handleChange} value={Formik.values.password}/>
+                        <input name="showPassword" type="checkbox" onChange={Formik.handleChange}/>
+                        <div style={{color: 'red'}}>{Formik.errors.password}</div>
+                        <button type="submit">LOGIN</button>
+                    </form>
+                }
+                { status &&
+                    <form>
+                        <Link data-toggle="tooltip" data-placement="bottom" title="Excess money? Put it in!" to="/deposit/"><button>Deposit</button></Link>
+                        <Link data-toggle="tooltip" data-placement="bottom" title="Need money? Take only what you need" to="/withdraw/"><button>Withdraw</button></Link>
+                    </form>
+                }
+                </div>
+                )}
         />
     )
 }

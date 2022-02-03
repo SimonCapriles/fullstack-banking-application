@@ -1,5 +1,7 @@
 import React from 'react';
 
+export const serverUrl = 'http://localhost:3000'
+
 export const themes = {
     light: {
         txtcolor: 'black',
@@ -14,6 +16,13 @@ export const themes = {
 export function validateEmail(email) {
     const re = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
     return re.test(String(email).toLowerCase())
+}
+
+export async function updateBalance(uid){
+    const url = `${serverUrl}/account/update/${uid}`;
+    var res = await fetch(url);
+    var data = await res.json();
+    return data[0].balance
 }
 
 export default function Card(props){
