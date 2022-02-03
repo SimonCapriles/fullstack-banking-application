@@ -9,6 +9,7 @@ import Deposit from './deposit';
 import Withdraw from './withdraw';
 import AllData from './alldata';
 import './App.css';
+import {app} from './firebase'
 
 // Context step 3: Create Context with default values
 export const UserContext = React.createContext({
