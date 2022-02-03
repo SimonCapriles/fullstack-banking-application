@@ -1,11 +1,12 @@
 import React, {useEffect} from 'react';
-import Account from './account'
+import Account from './account';
+import {serverUrl} from "./context";
 
 function AllData(){
     const [data, setData] = React.useState('');
     let users = null
     useEffect(()=>{
-        fetch('/account/all')
+        fetch(`${serverUrl}/account/all`)
             .then(response => response.json())
             .then(data => {setData(JSON.stringify(data));})
     })
