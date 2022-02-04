@@ -20,7 +20,7 @@ function Withdraw(){
             if (Object.keys(Formik.errors).length === 0) {
                 if (Formik.values.withdrawAmount > user.balance){
                     setInvalid(true)
-                    alert('Transaction Failed')
+                    alert('Not enough funds')
                 } else{
                     let uid = user.uid;
                     let balance = Formik.values.withdrawAmount;
@@ -35,7 +35,9 @@ function Withdraw(){
                                     let temp = {...user};
                                     temp.balance = result;
                                     setUser(temp);
+                                    localStorage.setItem('userValues', JSON.stringify(temp));
                                     setStatus(true);
+                                    alert('Withdraw successful');
                                 }
                             })
                         } else {
@@ -73,7 +75,12 @@ function Withdraw(){
                     { user &&
                         <div>BALANCE {user.balance}</div>
                     }
-                    <div>WITHDRAW AMOUNT</div>
+                    { status &&
+                        <div>MAKE ANOTHER WITHDRAW</div>
+                    }
+                    { !status &&
+                        <div>WITHDRAW AMOUNT</div>
+                    }
                     <input name="withdrawAmount" type="number" onChange={Formik.handleChange}
                            value={Formik.values.withdrawAmount}/>
                     <div style={{color: 'red'}}>{Formik.errors.withdrawAmount}</div>

@@ -31,7 +31,9 @@ function Deposit() {
                                 let temp = {...user};
                                 temp.balance = result;
                                 setUser(temp);
+                                localStorage.setItem('userValues', JSON.stringify(temp));
                                 setStatus(true);
+                                alert('Deposit successful');
                             }
                         })
                     } else {
@@ -68,7 +70,12 @@ function Deposit() {
                     { user &&
                         <div>BALANCE {user.balance}</div>
                     }
-                    <div>DEPOSIT AMOUNT</div>
+                    { status &&
+                        <div>MAKE ANOTHER DEPOSIT</div>
+                    }
+                    { !status &&
+                        <div>DEPOSIT AMOUNT</div>
+                    }
                     <input name="depositAmount" type="number" onChange={Formik.handleChange}
                            value={Formik.values.depositAmount}/>
                     <div style={{color: 'red'}}>{Formik.errors.depositAmount}</div>

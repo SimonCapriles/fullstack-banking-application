@@ -26,6 +26,10 @@ function App() {
     const [user, setUser] = React.useState(null)
     // Context step 4: Creating contextValue variable to pass with the Context.Provider
     const userValue = {user, setUser}
+    // Check if there is user data in localStorage and set user
+    if (!user && localStorage.getItem('userValues')) {
+        userValue.user = localStorage.getItem('userValues') ? JSON.parse(localStorage.getItem('userValues')) : null;
+    }
     let theme = React.useContext(ThemeContext);
 
     return (

@@ -5,7 +5,10 @@ import {UserContext} from "./App";
 // Context step 5: Consume Context
 function NavBar() {
     const {user, setUser} = React.useContext(UserContext);
-    const logout = () => {setUser(false)}
+    const logout = () => {
+        setUser(false);
+        localStorage.removeItem('userValues');
+    }
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
             <Link className="navbar-brand m-2" data-toggle="tooltip" data-placement="bottom" title="Go to the home page" to="/">BadBank</Link>

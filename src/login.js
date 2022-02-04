@@ -37,14 +37,16 @@ function Login(){
                             var data = await res.json();
                             let user_data = data[0]
                             if (data) {
-                                alert(`Welcome ${data[0].name}`);
                                 console.log(data)
-                                setStatus(true);
-                                setUser({
+                                let userValues = {
                                     uid: user_data.uid,
                                     name: user_data.name,
                                     balance: parseFloat(user_data.balance)
-                                })
+                                }
+                                setUser(userValues);
+                                localStorage.setItem('userValues', JSON.stringify(userValues));
+                                alert(`Welcome ${data[0].name}`);
+                                setStatus(true);
                             } else {
                                 alert('No data found')
                             }
