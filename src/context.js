@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const serverUrl = 'http://localhost:3000'
+export const serverUrl = 'https://banking-express-server.herokuapp.com'
 
 export const themes = {
     light: {
