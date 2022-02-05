@@ -4,9 +4,7 @@ import {useFormik} from "formik";
 import Card from './context';
 import {validateEmail} from "./context";
 
-import {signInWithRedirect, getRedirectResult, signInWithPopup, GoogleAuthProvider, getAuth} from "firebase/auth";
-
-import {createUserWithEmailAndPassword} from "firebase/auth";
+import {signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, getAuth} from "firebase/auth";
 
 function validatePassword(password) {
     const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/
@@ -22,6 +20,15 @@ function CreateAccount() {
         prompt: "select_account"
     });
     const auth = getAuth();
+
+    async function createUser(name, email, password, uid){
+        var res = await fetch(`${serverUrl}/account/create/${name}/${email}/${password}/${uid}`);
+        var data = await res.json();
+        if (data) {
+            console.log('Account created in database');
+        }
+    }
+
     const Formik = useFormik({
         // Form initial value definition
         initialValues: {
@@ -44,18 +51,10 @@ function CreateAccount() {
                         .then((userCredential) => {
                             // Signed in
                             const user = userCredential.user;
-                            let uid = user.uid
                             // Message if user created
-                            alert('Firebase Account created');
+                            alert('Account created');
                             // Create records in Mongodb
-                            const url = `${serverUrl}/account/create/${name}/${email}/${password}/${uid}`;
-                            (async () => {
-                                var res = await fetch(url);
-                                var data = await res.json();
-                                if (data) {
-                                    console.log('Account created in database');
-                                }
-                            })();
+                            createUser(name, email, password, user.uid);
                             setStatus(true);
                             Formik.resetForm();
                         })
@@ -66,31 +65,16 @@ function CreateAccount() {
                     signInWithPopup(auth, provider)
                         .then((result) => {
                             // This gives you a Google Access Token. You can use it to access the Google API.
-                            const credential = GoogleAuthProvider.credentialFromResult(result);
-                            const token = credential.accessToken;
+                            // const credential = GoogleAuthProvider.credentialFromResult(result);
+                            // const token = credential.accessToken;
                             // The signed-in user info.
                             const user = result.user;
-                            alert('Firebase Account created');
+                            console.log(user);
+                            createUser(user.displayName, user.email,false, user.uid);
+                            alert('Account created');
                         }).catch((error) => {
                         // Handle Errors here.
-                        console.log(error.message);
-                        getRedirectResult(auth)
-                            .then((result) => {
-                                // This gives you a Google Access Token. You can use it to access Google APIs.
-                                const credential = GoogleAuthProvider.credentialFromResult(result);
-                                const token = credential.accessToken;
-
-                                // The signed-in user info.
-                                const user = result.user;
-                            }).catch((error) => {
-                            // Handle Errors here.
-                            console.log(error.message);
-                            // The email of the user's account used.
-                            const email = error.email;
-                            // The AuthCredential type that was used.
-                            const credential = GoogleAuthProvider.credentialFromError(error);
-                        });
-                        signInWithRedirect(auth, provider);
+                        alert(error.message);
                     });
                 }
             }
