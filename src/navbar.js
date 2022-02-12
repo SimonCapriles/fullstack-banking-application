@@ -3,9 +3,10 @@ import React from "react";
 import {UserContext} from "./App";
 
 // Context step 5: Consume Context
-function NavBar() {
+function NavBar({firebase}) {
     const {user, setUser} = React.useContext(UserContext);
     const logout = () => {
+        firebase.auth().signOut();
         setUser(false);
         localStorage.removeItem('userValues');
     }

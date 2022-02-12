@@ -8,7 +8,7 @@ import {Link} from "react-router-dom";
 
 import {getAuth, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup} from "firebase/auth";
 
-function Login() {
+function Login({firebase}) {
     let [status, setStatus] = React.useState(false);
     const {setUser} = React.useContext(UserContext);
     let theme = React.useContext(ThemeContext);
@@ -18,23 +18,36 @@ function Login() {
     });
     const auth = getAuth();
 
-    async function loginUser(uid){
-        var res = await fetch(`${serverUrl}/account/login/${uid}`);
-        var data = await res.json();
-        let user_data = data[0]
-        if (user_data) {
-            console.log(data)
-            let userValues = {
-                uid: user_data.uid,
-                name: user_data.name,
-                balance: parseFloat(user_data.balance)
-            }
-            setUser(userValues);
-            localStorage.setItem('userValues', JSON.stringify(userValues));
-            alert(`Welcome ${user_data.name}`);
-            setStatus(true);
-        } else {
-            alert('No data found')
+    // callAuthRoute()
+    function loginUser (uid){
+        if (firebase.auth().currentUser) {
+            firebase.auth().currentUser.getIdToken()
+                .then(idToken => {
+                    (async () => {
+                        var res = await fetch(`${serverUrl}/account/login/${uid}`, {
+                            method: 'GET',
+                            headers: {
+                                'Authorization': idToken
+                            }
+                        });
+                        var data = await res.json();
+                        let user_data = data[0]
+                        if (user_data) {
+                            console.log(data)
+                            let userValues = {
+                                uid: user_data.uid,
+                                name: user_data.name,
+                                balance: parseFloat(user_data.balance)
+                            }
+                            setUser(userValues);
+                            localStorage.setItem('userValues', JSON.stringify(userValues));
+                            alert(`Welcome ${user_data.name}`);
+                            setStatus(true);
+                        } else {
+                            alert('No data found')
+                        }
+                    })()
+                })
         }
     }
 

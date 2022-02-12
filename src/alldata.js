@@ -26,17 +26,19 @@ function AllData({firebase}){
     }
 
     const removeUser = uid => {
-        console.log(uid);
-        (async () => {
-            var res = await fetch(`${serverUrl}/account/delete/${uid}`);
-            var data = await res.json();
-            if (data) {
-                alert('User removed')
-                setData(JSON.stringify(data));
-            } else {
-                alert('No data found')
-            }
-        })();
+        if (firebase.auth().currentUser) {
+            firebase.auth().currentUser.getIdToken()
+                .then(idToken => {
+                    fetch(`${serverUrl}/account/delete/${uid}`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': idToken
+                        }
+                    })
+                        .then(response => response.json())
+                        .then(data => {setData(JSON.stringify(data));})
+                })
+        }
     }
 
     return (
